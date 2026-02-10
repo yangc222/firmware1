@@ -1,63 +1,34 @@
-#ifndef Pins_Arduino_h
-#define Pins_Arduino_h
+#ifndef PINS_ARDUINO_H
+#define PINS_ARDUINO_H
 
 #include <stdint.h>
 
-// =========================================================
-// 1. LoRa 射频模组 (专用名 + 通用名)
-// =========================================================
-#define USE_SX1262
+// I2C: 传感器、屏幕、摇杆 (原理图确认)
+static const uint8_t SDA = 0; 
+static const uint8_t SCL = 1; 
 
-// 原始定义 (根据原理图)
-#define LORA_SCK    10
-#define LORA_MISO   6
-#define LORA_MOSI   7
-#define LORA_CS     8
-#define LORA_RST    5
-#define LORA_DIO1   3
-#define LORA_BUSY   4
+// SPI: LoRa 模块 (基于之前成功的逆向数据)
+static const uint8_t SCK  = 4; 
+static const uint8_t MISO = 5; 
+static const uint8_t MOSI = 6; 
+static const uint8_t SS   = 7; 
 
-// 【核心修复】这里是补全刚才报错缺失的“通用大名”
-// 告诉标准 SPI 库：默认的 SCK/MISO/MOSI 是哪几个脚
-#define SCK         LORA_SCK
-#define MISO        LORA_MISO
-#define MOSI        LORA_MOSI
-#define SS          LORA_CS
+// LoRa 控制引脚
+#define LORA_DIO1 1   
+#define LORA_BUSY 10  
+#define LORA_RST  11  // 对应熔断 eFuse 的引脚
 
-// Meshtastic 官方库需要的马甲
-#define SX126X_CS    LORA_CS
-#define SX126X_RESET LORA_RST
-#define SX126X_BUSY  LORA_BUSY
-#define SX126X_DIO1  LORA_DIO1
+// 电池检测: 分压电路接在 GPIO 2
+#define BATTERY_PIN 2            
+#define ADC_CHANNEL ADC1_CHANNEL_2
+#define ADC_MULTIPLIER 2.1       
 
-// 射频开关
-#define SX126X_DIO2_AS_RF_SWITCH
+// 摇杆与中断
+#define BUTTON_PIN 9             
 
-// =========================================================
-// 2. 屏幕与 I2C
-// =========================================================
-#undef SDA
-#undef SCL
-#define SDA 2
-#define SCL 1
-#define USE_SSD1306
-#define HAS_SCREEN 1
+// LED 定义 (如果 PCB 上有 LED 连在 GPIO 8)
+#ifndef LED_PIN
+#define LED_PIN 8
+#endif
 
-// =========================================================
-// 3. 电池与 ADC
-// =========================================================
-#define BATTERY_PIN 0
-#define ADC_MULTIPLIER 3.0
-#define ADC_CHANNEL ADC1_CHANNEL_0
-
-// =========================================================
-// 4. 按键与 LED
-// =========================================================
-#define BUTTON_PIN 9
-
-// 强制覆盖 LED 定义
-#undef LED_BUILTIN
-#define LED_BUILTIN 255
-#define LED_PIN 255
-
-#endif /* Pins_Arduino_h */
+#endif /* PINS_ARDUINO_H */ // 必须有这一行来结束文件
